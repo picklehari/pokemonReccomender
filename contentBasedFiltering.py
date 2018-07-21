@@ -25,12 +25,15 @@ count = CountVectorizer(stop_words='english')
 countMatrix =count.fit_transform(pokemon['soup'])
 
 cosinSim = cosine_similarity(countMatrix,countMatrix)
+pokemon = pokemon.reset_index()
 indices = pandas.Series(pokemon.index,index=pokemon['Name']).drop_duplicates()
+
 def getRecommendations(Name,cosinSim=cosinSim):
     idx = indices[Name]
     simScores = list(enumerate(cosinSim[idx]))
-    simScores = sorted(simScores,key = lambda x:x[1],reverse=True)
-    simScores = simScores[1:10]
+    simScores = sorted(simScores,key = lambda x: x[1],reverse=True)
+    simScores = simScores[1:11]
     pokemonIndices = [i[0] for i in simScores]
     return pokemon['Name'].iloc[pokemonIndices]
-print(getRecommendations('Rayquaza',cosinSim))
+preferredPokemon = input('Enter a preferred pokemon (Sentence Case) ')
+print(getRecommendations(preferredPokemon,cosinSim))
