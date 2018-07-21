@@ -32,8 +32,12 @@ def getRecommendations(Name,cosinSim=cosinSim):
     idx = indices[Name]
     simScores = list(enumerate(cosinSim[idx]))
     simScores = sorted(simScores,key = lambda x: x[1],reverse=True)
-    simScores = simScores[1:11]
-    pokemonIndices = [i[0] for i in simScores]
+    simScores = simScores[0:11]
+    pokemonIndices = list()
+    for i in simScores:
+        if i[0] == idx:
+            continue
+        pokemonIndices.append(i[0])
     return pokemon['Name'].iloc[pokemonIndices]
 preferredPokemon = input('Enter a preferred pokemon (Sentence Case) ')
 print(getRecommendations(preferredPokemon,cosinSim))
